@@ -4,6 +4,8 @@ const express = require('express');
 const router = express.Router();
 //需要引入module里面的use，因为要操作这个表的文件,因为是构造函数，所以大写
 const UseModel = require('../modules/use'); 
+//引入一个密码加密的模块
+const bcryptjs = require('bcryptjs')
 //设置注册的路由
 router.get('/create',(req,res) => {
     res.render('../views/register.ejs')
@@ -23,14 +25,15 @@ router.post('/stroe',async (req,res) => {
     }
     //验证唯一性
     let data = await UseModel.findOne({ email:email });
-    if( data.email || data.username ){
+    console.log(data);
+    if(data){
         res.send('用户名或者邮箱已被注册!');
         // return;
     }else{
         //存储到数据库中
         let user = new UseModel({
             username:username,
-            password:password,
+            password:bcryptjs.hashSync(req.body.password),
             email:email
         });
 
