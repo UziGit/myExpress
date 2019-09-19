@@ -1,3 +1,59 @@
+//引入express
+const express = require('express');
+//引入注册页面的路由模块
+const registerRouter = require('./routes/user');
+const cookieParser = require('cookie-parser');
+
+const server = express();
+//做引入模板引擎的处理
+server.set('views','views');
+server.set('view engine','ejs');
+
+//处理静态资源托管
+server.use(express.static('public'));
+
+//处理req.body
+server.use(express.json());
+server.use(express.urlencoded({ extended : true }));
+
+//处理cookies
+server.use(cookieParser());
+
+//处理注册的路由的中间件
+server.use('/register',registerRouter)
+// server.use('/mongoose',mongoose)
+ 
+
+server.listen(3000,() => {
+    console.log('服务启动，地址：127.0.0.1:3000')
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // //引入express
 // const express = require('express');
 // const server = express();
@@ -36,28 +92,28 @@
 // })
 
 
-//引入express
-const express = require('express');
-const cookieParser = require('cookie-parser');
-const server = express(); 
-//引入路由模块
-const postRouter = require('./routes/post');
-const studentRouter = require('./routes/student');
+// //引入express
+// const express = require('express');
+// const cookieParser = require('cookie-parser');
+// const server = express(); 
+// //引入路由模块
+// const postRouter = require('./routes/post');
+// const studentRouter = require('./routes/student');
 
-server.use('/post',postRouter);
+// server.use('/post',postRouter);
 
-server.use('/student',studentRouter);
+// server.use('/student',studentRouter);
 
-//设置ejs模板引擎相关的操作
-server.set('views','views');
-server.set('view engine','ejs')
+// //设置ejs模板引擎相关的操作
+// server.set('views','views');
+// server.set('view engine','ejs')
 
-//配置welcome的路由
-server.get('/welcome',(req,res) => {
-    //因为上面已经设置了ejs的模板引擎相关操作，所以这里可以直接使用，.ejs可以省略；
-    res.render('welcome.ejs',{name:'李威'})
-})
+// //配置welcome的路由
+// server.get('/welcome',(req,res) => {
+//     //因为上面已经设置了ejs的模板引擎相关操作，所以这里可以直接使用，.ejs可以省略；
+//     res.render('welcome.ejs',{name:'dengchao'})
+// })
 
-server.listen(3000,()=>{
-    console.log('服务启动，地址：127.0.0.1:3000');
-})
+// server.listen(3000,()=>{
+//     console.log('服务启动，地址：127.0.0.1:3000');
+// })
