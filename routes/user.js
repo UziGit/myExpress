@@ -10,7 +10,7 @@ router.get('/create',(req,res) => {
 });
 
 //注册完成的路由
-router.post('/stroe',(req,res) => {
+router.post('/stroe',async (req,res) => {
     //获取form表单传过来的参数
     let username = req.body.username;
     let password = req.body.password;
@@ -22,28 +22,44 @@ router.post('/stroe',(req,res) => {
         return;
     }
     //验证唯一性
-    UseModel.findOne({ email:email }).then( (data) => {
-        if( data.email || data.username ){
-            res.send('用户名或者邮箱已被注册!');
-            // return;
-        }else{
-            //存储到数据库中
-            let user = new UseModel({
-                username:username,
-                password:password,
-                email:email
-            });
+    let data = await UseModel.findOne({ email:email });
+    if( data.email || data.username ){
+        res.send('用户名或者邮箱已被注册!');
+        // return;
+    }else{
+        //存储到数据库中
+        let user = new UseModel({
+            username:username,
+            password:password,
+            email:email
+        });
 
-            user.save().then(()=>{
-                res.send('注册成功');
-            }).catch(()=>{
-                res.send('注册失败');
-            })
+        await user.save()
+        res.send('注册成功');
+ 
+    } 
+    //.then( (data) => {
+    //     if( data.email || data.username ){
+    //         res.send('用户名或者邮箱已被注册!');
+    //         // return;
+    //     }else{
+    //         //存储到数据库中
+    //         let user = new UseModel({
+    //             username:username,
+    //             password:password,
+    //             email:email
+    //         });
+
+    //         user.save().then(()=>{
+    //             res.send('注册成功');
+    //         }).catch(()=>{
+    //             res.send('注册失败');
+    //         })
         
-            console.log(req.body);
-            res.send('注册成功');
-        }
-    })
+    //         console.log(req.body);
+    //         res.send('注册成功');
+    //     }
+    // })
 
 });
 module.exports = router;
